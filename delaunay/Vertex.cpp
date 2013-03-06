@@ -8,12 +8,13 @@
 #include "delaunay/Vertex.h"
 #include "delaunay/Edge.h"
 #include "delaunay/Halfedge.h"
+#include "delaunay/Voronoi.h"
 #include <math.h>
 
 namespace Delaunay
 {
 	int Vertex::_nvertices = 0;
-	const Vertex* Vertex::VERTEX_AT_INFINITY = new Vertex( NAN, NAN );
+	Vertex* Vertex::VERTEX_AT_INFINITY = new Vertex( NAN, NAN );
 
 	Vertex::Vertex( Number x, Number y )
 	{
@@ -31,7 +32,7 @@ namespace Delaunay
 		return this;
 	}
 
-	static Vertex* Vertex::create( Number x, Number y )
+	Vertex* Vertex::create( Number x, Number y )
 	{
 		if( isnan( x ) || isnan( y ) )
 			return VERTEX_AT_INFINITY;
@@ -48,7 +49,7 @@ namespace Delaunay
 
 	void Vertex::dispose( )
 	{
-		delete _coord, coord = NULL;
+		delete _coord, _coord = NULL;
 		_pool.push_back( this );
 	}
 

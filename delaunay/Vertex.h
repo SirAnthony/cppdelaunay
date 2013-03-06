@@ -8,6 +8,7 @@
 #ifndef VERTEX_H_
 #define VERTEX_H_
 
+#include "delaunay/ICoord.h"
 #include <vector>
 
 namespace Delaunay
@@ -15,13 +16,13 @@ namespace Delaunay
 
 	class Halfedge;
 
-	class Vertex
+	class Vertex : public ICoord
 	{
 	public:
 		static Vertex* create( Number x, Number y);
 		void dispose();
 
-		inline Point* coord()
+		inline const Point* coord() const
 		{
 			return _coord;
 		}
@@ -51,6 +52,7 @@ namespace Delaunay
 		 */
 		Vertex* intersect( Halfedge* halfedge0, Halfedge* halfedge1 );
 
+		static Vertex* VERTEX_AT_INFINITY;
 
 	private:
 		Vertex( Number, Number );
@@ -58,7 +60,6 @@ namespace Delaunay
 		Vertex* init( Number x, Number y );
 
 		static std::vector< Vertex* > _pool;;
-		static const Vertex* VERTEX_AT_INFINITY;
 		static int _nvertices;
 		Point* _coord;
 		int _vertexIndex;

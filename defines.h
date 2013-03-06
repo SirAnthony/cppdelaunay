@@ -5,16 +5,19 @@
  *
  */
 
-#ifndef DEFINES_H_
-#define DEFINES_H_
+#ifndef DELAUNAY_DEFINES_H_
+#define DELAUNAY_DEFINES_H_
 
 #include "stddef.h"
+#include <cfloat>
 
 namespace Delaunay{
 
 	typedef float Number;
+#define DELAUNAY_NUMBER_MAX FLT_MAX
+#define DELAUNAY_NUMBER_MIN FLT_MIN
 
 }
 
 
-#endif /* DEFINES_H_ */
+#endif /* DELAUNAY_DEFINES_H_ */

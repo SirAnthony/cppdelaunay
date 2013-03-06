@@ -10,6 +10,7 @@
 
 #include "geom/Rectangle.h"
 #include "geom/Point.h"
+#include "delaunay/ICoord.h"
 #include "delaunay/LR.h"
 #include "defines.h"
 #include <vector>
@@ -53,7 +54,7 @@ namespace Delaunay
 
 	}
 
-	class Site
+	class Site : public ICoord
 	{
 	public:
 		Site( Point* p, int index, Number weight, unsigned color );
@@ -83,7 +84,7 @@ namespace Delaunay
 
 		std::vector< Site* > neighborSites( );
 
-		std::vector< Point* > region( Rectangle& clippingBounds );
+		std::vector< Point* > region( const Rectangle& clippingBounds );
 
 		inline Number x( )
 		{

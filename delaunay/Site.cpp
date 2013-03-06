@@ -7,6 +7,9 @@
 
 #include "delaunay/Site.h"
 #include "delaunay/Edge.h"
+#include "delaunay/Voronoi.h"
+#include "delaunay/EdgeReorderer.h"
+#include "geom/Polygon.h"
 #include <algorithm>
 #include <vector>
 
@@ -83,7 +86,7 @@ namespace Delaunay
 		return list;
 	}
 
-	std::vector< Point* > Site::region( Rectangle& clippingBounds )
+	std::vector< Point* > Site::region( const Rectangle& clippingBounds )
 	{
 		if( _edges.size( ) == 0 ){
 			return std::vector< Point* >();
@@ -92,9 +95,8 @@ namespace Delaunay
 		if( _edgeOrientations.size( ) ){
 			reorderEdges( );
 			_region = clipToBounds( clippingBounds );
-			if( (new Polygon( _region )).winding( ) == Winding.CLOCKWISE ){
-				_region = _region.reverse( );
-			}
+			if( Polygon( _region ).winding( ) == Winding::CLOCKWISE )
+				std::reverse( _region.begin(), _region.end() );
 		}
 		return _region;
 	}
@@ -153,10 +155,9 @@ namespace Delaunay
 
 	void Site::reorderEdges( )
 	{
-		EdgeReorderer reorderer( _edges, Vertex );
-		_edges = reorderer.edges;
-		_edgeOrientations = reorderer.edgeOrientations;
-		reorderer.dispose( );
+		EdgeReorderer reorderer( _edges, EdgeReorderer::cVertex );
+		_edges = reorderer.edges();
+		_edgeOrientations = reorderer.edgeOrientations();
 	}
 
 	std::vector< Point* > Site::clipToBounds( const Rectangle& bounds )
