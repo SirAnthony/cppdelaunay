@@ -19,10 +19,10 @@ namespace Delaunay
 		// TODO Auto-generated destructor stub
 	}
 
-	Number compareLengths_MAX( const LineSegment& segment0, const LineSegment& segment1 )
+	Number compareLengths_MAX( const LineSegment* segment0, const LineSegment* segment1 )
 	{
-		Number length0 = Point::distance( segment0.p0, segment0.p1 );
-		Number length1 = Point::distance( segment1.p0, segment1.p1 );
+		Number length0 = Point::distance( segment0->p0, segment0->p1 );
+		Number length1 = Point::distance( segment1->p0, segment1->p1 );
 		if( length0 < length1 )
 			return 1;
 		if( length0 > length1 )
@@ -30,7 +30,7 @@ namespace Delaunay
 		return 0;
 	}
 
-	Number compareLengths( const LineSegment& s0, const LineSegment& s1 )
+	Number compareLengths( const LineSegment* s0, const LineSegment* s1 )
 	{
 		return -compareLengths_MAX( s0, s1 );
 	}

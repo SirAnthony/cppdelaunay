@@ -19,8 +19,8 @@ namespace Delaunay
 		LineSegment( const Point*, const Point* );
 		~LineSegment( );
 
-		static Number compareLengths_MAX( const LineSegment&, const LineSegment& );
-		static Number compareLengths( const LineSegment&, const LineSegment& );
+		static Number compareLengths_MAX( const LineSegment*, const LineSegment* );
+		static Number compareLengths( const LineSegment*, const LineSegment* );
 
 		const Point* p0;
 		const Point* p1;

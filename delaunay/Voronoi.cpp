@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <cmath>
 
-
 namespace Delaunay
 {
 
@@ -116,11 +115,11 @@ namespace Delaunay
 	}
 
 	std::vector< LineSegment* > Voronoi::spanningTree(
-			int type /* = "minimum" , keepOutMask:BitmapData = null */)
+			enum KruskalType type /*, keepOutMask:BitmapData = null */)
 	{
 		std::vector< Edge* > edges = selectNonIntersectingEdges( /*keepOutMask,*/_edges );
 		std::vector< LineSegment* > segments = delaunayLinesForEdges( edges );
-		return std::vector< LineSegment* >( ); // kruskal(segments, type);
+		return kruskal( segments, type );
 	}
 
 	std::vector< std::vector< Point* > > Voronoi::regions( )
@@ -147,13 +146,13 @@ namespace Delaunay
 	template<>
 	Number Voronoi::compareByYThenX( const Site* s1, Site* s2 )
 	{
-		if( s1->y( ) < s2->y() )
+		if( s1->y( ) < s2->y( ) )
 			return -1;
-		if( s1->y( ) > s2->y() )
+		if( s1->y( ) > s2->y( ) )
 			return 1;
-		if( s1->x( ) < s2->x() )
+		if( s1->x( ) < s2->x( ) )
 			return -1;
-		if( s1->x( ) > s2->x() )
+		if( s1->x( ) > s2->x( ) )
 			return 1;
 		return 0;
 	}
@@ -183,9 +182,9 @@ namespace Delaunay
 
 	void Voronoi::addSite( Point* p, unsigned color, int index )
 	{
-		Number weight = random() * 100;
-		Site* site = Site::create(p, index, weight, color);
-		_sites.push(site);
+		Number weight = random( ) * 100;
+		Site* site = Site::create( p, index, weight, color );
+		_sites.push( site );
 		_sitesIndexedByLocation[p] = site;
 	}
 
@@ -230,8 +229,8 @@ namespace Delaunay
 		const Rectangle& dataBounds = _sites.sitesBounds( );
 
 		int sqrt_nsites = (int) sqrt( _sites.length( ) + 4 );
-		HalfedgePriorityQueue heap( dataBounds.y(), dataBounds.height(), sqrt_nsites );
-		EdgeList edgeList( dataBounds.x(), dataBounds.width(), sqrt_nsites );
+		HalfedgePriorityQueue heap( dataBounds.y( ), dataBounds.height( ), sqrt_nsites );
+		EdgeList edgeList( dataBounds.x( ), dataBounds.width( ), sqrt_nsites );
 		std::vector< Halfedge* > halfEdges;
 		std::vector< Vertex* > vertices;
 
@@ -248,11 +247,11 @@ namespace Delaunay
 				//trace("smallest: new site " + newSite);
 
 				// Step 8:
-				lbnd = edgeList.edgeListLeftNeighbor( newSite->coord( ) );	// the Halfedge just to the left of newSite
+				lbnd = edgeList.edgeListLeftNeighbor( newSite->coord( ) );// the Halfedge just to the left of newSite
 				//trace("lbnd: " + lbnd);
-				rbnd = lbnd->edgeListRightNeighbor;							// the Halfedge just to the right
+				rbnd = lbnd->edgeListRightNeighbor;		// the Halfedge just to the right
 				//trace("rbnd: " + rbnd);
-				bottomSite = rightRegion( lbnd, bottomMostSite );			// this is the same as leftRegion(rbnd)
+				bottomSite = rightRegion( lbnd, bottomMostSite );// this is the same as leftRegion(rbnd)
 				// this Site determines the region containing the new site
 				//trace("new Site is in region of existing site: " + bottomSite);
 
@@ -343,17 +342,20 @@ namespace Delaunay
 		}
 
 		// heap should be empty now
-		for( std::vector<Halfedge*>::iterator it = halfEdges.begin(); it != halfEdges.end(); ++it )
-			(*it)->reallyDispose();
-		halfEdges.clear();
+		for( std::vector< Halfedge* >::iterator it = halfEdges.begin( );
+				it != halfEdges.end( ); ++it )
+			(*it)->reallyDispose( );
+		halfEdges.clear( );
 
 		// we need the vertices to clip the edges
-		for( std::vector<Edge*>::iterator it = _edges.begin(); it != _edges.end(); ++it )
-			(*it)->clipVertices(_plotBounds);
+		for( std::vector< Edge* >::iterator it = _edges.begin( ); it != _edges.end( );
+				++it )
+			(*it)->clipVertices( _plotBounds );
 
 		// but we don't actually ever use them again!
-		for( std::vector<Vertex*>::iterator it = vertices.begin(); it != vertices.end(); ++it )
-			(*it)->dispose();
-		vertices.clear();
+		for( std::vector< Vertex* >::iterator it = vertices.begin( );
+				it != vertices.end( ); ++it )
+			(*it)->dispose( );
+		vertices.clear( );
 	}
 } /* namespace Delaunay */

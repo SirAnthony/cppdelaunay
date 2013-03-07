@@ -1,7 +1,7 @@
 # source files.
 SRC =  $(addsuffix .cpp, \
 	$(addprefix delaunay/, Edge EdgeList EdgeReorderer Functions Halfedge \
-						   HalfedgePriorityQueue LR Site Vertex Voronoi) \
+				HalfedgePriorityQueue ICoord kruskal LR Site Vertex Voronoi) \
 	$(addprefix geom/, Circle LineSegment Point Rectangle Polygon Triangle) ) 
 
 OBJ = $(SRC:.cpp=.o)

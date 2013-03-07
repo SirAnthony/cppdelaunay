@@ -10,10 +10,10 @@
 
 #include "geom/Triangle.h"
 #include "delaunay/SiteList.h"
+#include "delaunay/kruskal.h"
 #include "geom/LineSegment.h"
 #include <vector>
 #include <map>
-
 
 namespace Delaunay
 {
@@ -21,12 +21,12 @@ namespace Delaunay
 	class Voronoi
 	{
 	public:
-		Voronoi( const std::vector<Point*>& points, const std::vector<unsigned>* colors,
-				Rectangle& plotBounds );
+		Voronoi( const std::vector< Point* >& points,
+				const std::vector< unsigned >* colors, Rectangle& plotBounds );
 		~Voronoi( );
 
-		const Rectangle& plotBounds();
-		const std::vector< Edge* >& edges();
+		const Rectangle& plotBounds( );
+		const std::vector< Edge* >& edges( );
 		std::vector< Point* > region( Point* p );
 
 		// TODO: bug: if you call this before you call region(), something goes wrong :(
@@ -36,12 +36,13 @@ namespace Delaunay
 		std::vector< LineSegment* > voronoiBoundaryForSite( Point* coord );
 		std::vector< LineSegment* > delaunayLinesForSite( Point* coord );
 		std::vector< LineSegment* > voronoiDiagram( );
-		std::vector< LineSegment* > delaunayTriangulation( /* keepOutMask:BitmapData = null */ );
+		std::vector< LineSegment* > delaunayTriangulation( /* keepOutMask:BitmapData = null */);
 		std::vector< LineSegment* > hull( );
-		std::vector< const Point* > hullPointsInOrder();
-		std::vector< LineSegment* > spanningTree( int type /* = "minimum" , keepOutMask:BitmapData = null */);
-		std::vector< std::vector< Point* > > regions();
-		std::vector< unsigned > siteColors( /* referenceImage:BitmapData = null */ );
+		std::vector< const Point* > hullPointsInOrder( );
+		std::vector< LineSegment* > spanningTree(
+				enum KruskalType type = ktMinimum /* , keepOutMask:BitmapData = null */);
+		std::vector< std::vector< Point* > > regions( );
+		std::vector< unsigned > siteColors( /* referenceImage:BitmapData = null */);
 
 		/**
 		 *
@@ -51,10 +52,10 @@ namespace Delaunay
 		 * @return coordinates of nearest Site to (x, y)
 		 *
 		 */
-		const Point* nearestSitePoint( /* proximityMap:BitmapData,*/ Number x, Number y );
-		std::vector< const Point* > siteCoords();
+		const Point* nearestSitePoint( /* proximityMap:BitmapData,*/Number x, Number y );
+		std::vector< const Point* > siteCoords( );
 
-		template <class T>
+		template<class T>
 		static Number compareByYThenX( const Site* s1, T s2 );
 
 	private:
@@ -67,11 +68,11 @@ namespace Delaunay
 		// then we can make the fractal voronois-within-voronois
 		Rectangle _plotBounds;
 
-		void addSites( const std::vector<Point*>&, const std::vector<unsigned>*);
+		void addSites( const std::vector< Point* >&, const std::vector< unsigned >* );
 		void addSite( Point* p, unsigned color, int index );
 		std::vector< Edge* > hullEdges( );
 
-		void fortunesAlgorithm();
+		void fortunesAlgorithm( );
 	};
 
 } /* namespace Delaunay */
