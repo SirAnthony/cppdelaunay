@@ -97,7 +97,7 @@ namespace Delaunay
 			return std::vector< Site* >();
 		}
 		// TODO: check if reordered but count is 0
-		if( _edgeOrientations.size( ) ){
+		if( _edgeOrientations.size( ) == 0 ){
 			reorderEdges( );
 		}
 		std::vector< Site* > list;
@@ -112,7 +112,7 @@ namespace Delaunay
 		if( _edges.size( ) == 0 )
 			return std::vector< Point* >();
 		// TODO: check if reordered but count is 0
-		if( _edgeOrientations.size( ) ){
+		if( _edgeOrientations.size( ) == 0 ){
 			reorderEdges( );
 			_region = clipToBounds( clippingBounds );
 			if( Polygon( _region ).winding( ) == Winding::CLOCKWISE )
@@ -121,7 +121,7 @@ namespace Delaunay
 		return _region;
 	}
 
-	Number Site::compare( Site* s1, Site* s2 )
+	int Site::compareInt( Site* s1, Site* s2 )
 	{
 		int returnValue = Voronoi::compareByYThenX( s1, s2 );
 
@@ -142,6 +142,11 @@ namespace Delaunay
 
 		}
 		return returnValue;
+	}
+
+	bool Site::compare( Site* s1, Site* s2 )
+	{
+		return (compareInt( s1, s2 ) < 0);
 	}
 
 	bool Site::closeEnough( const Point* p0, const Point* p1 )
@@ -201,7 +206,7 @@ namespace Delaunay
 
 		for( int j = i + 1; j < n; ++j ){
 			edge = _edges[j];
-			if( edge->visible() == false )
+			if( !edge || edge->visible() == false )
 				continue;
 			connect( points, j, bounds );
 		}

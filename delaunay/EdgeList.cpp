@@ -33,11 +33,11 @@ namespace Delaunay
 	{
 		Halfedge* halfEdge = _leftEnd;
 		Halfedge* prevHe = NULL;
-		while( halfEdge != _rightEnd ){
-			prevHe = halfEdge;
-			halfEdge = halfEdge->edgeListRightNeighbor;
-			prevHe->dispose( );
-		}
+		//while( halfEdge != _rightEnd ){
+		//	prevHe = halfEdge;
+		//	halfEdge = halfEdge->edgeListRightNeighbor;
+		//	prevHe->dispose( );
+		//}
 		_leftEnd = NULL;
 		_rightEnd->dispose( );
 		_rightEnd = NULL;
@@ -56,8 +56,8 @@ namespace Delaunay
 
 	void EdgeList::insert( Halfedge* lb, Halfedge* newHalfedge )
 	{
-		newHalfedge->edgeListLeftNeighbor = lb;
 		newHalfedge->edgeListRightNeighbor = lb->edgeListRightNeighbor;
+		newHalfedge->edgeListLeftNeighbor = lb;
 		lb->edgeListRightNeighbor->edgeListLeftNeighbor = newHalfedge;
 		lb->edgeListRightNeighbor = newHalfedge;
 	}

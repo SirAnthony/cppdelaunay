@@ -184,7 +184,7 @@ namespace Delaunay
 	{
 		Number weight = random( ) * 100;
 		Site* site = Site::create( p, index, weight, color );
-		_sites.push( site );
+		_sites.push(site);
 		_sitesIndexedByLocation[p] = site;
 	}
 

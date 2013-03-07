@@ -15,10 +15,27 @@ namespace Delaunay
 	class ICoord
 	{
 	public:
-		const Point* coord( ) const
+		inline const Point* coord( ) const
 		{
-			return NULL;
+			return _coord;
 		}
+
+		inline Number x( ) const
+		{
+			return _coord->x;
+		}
+		inline Number y( ) const
+		{
+			return _coord->y;
+		}
+
+		inline Number dist( ICoord* p )
+		{
+			return Point::distance( p->coord( ), _coord );
+		}
+
+	protected:
+		Point* _coord;
 	};
 
 } /* namespace Delaunay */

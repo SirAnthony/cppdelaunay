@@ -48,11 +48,6 @@ namespace Delaunay
 
 		static void sortSites( std::vector< Site* >& sites );
 
-		inline const Point* coord( ) const
-		{
-			return _coord;
-		}
-
 		inline const std::vector< Edge* >& edges( )
 		{
 			return _edges;
@@ -69,24 +64,9 @@ namespace Delaunay
 
 		std::vector< Point* > region( const Rectangle& clippingBounds );
 
-		inline Number x( ) const
-		{
-			return _coord->x;
-		}
-
-		inline Number y( ) const
-		{
-			return _coord->y;
-		}
-
 		inline unsigned color()
 		{
 			return _color;
-		}
-
-		inline Number dist( ICoord* p )
-		{
-			return Point::distance( p->coord( ), this->_coord );
 		}
 
 	private:
@@ -100,12 +80,13 @@ namespace Delaunay
 		 */
 		Site* init( Point* p, int index, Number weight, unsigned color );
 
-		static Number compare( Site* s1, Site* s2 );
+		static int compareInt( Site* s1, Site* s2 );
+		static bool compare( Site* s1, Site* s2 );
+
 		static bool closeEnough( const Point* p0, const Point* p1 );
 
 		static std::vector< Site* > _pool;
 
-		Point* _coord;
 		unsigned _color;
 		Number weight;
 		unsigned _siteIndex;

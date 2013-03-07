@@ -15,7 +15,6 @@
 #include "defines.h"
 #include <vector>
 
-
 namespace Delaunay
 {
 
@@ -28,11 +27,9 @@ namespace Delaunay
 		 *
 		 */
 
-
 	public:
-		LineSegment* delaunayLine();
-		LineSegment* voronoiEdge();
-
+		LineSegment* delaunayLine( );
+		LineSegment* voronoiEdge( );
 
 		/**
 		 * This is the only way to create a new Edge
@@ -41,10 +38,10 @@ namespace Delaunay
 		 * @return
 		 *
 		 */
-		static Edge* createBisectingEdge( Site* , Site* );
-		void dispose();
+		static Edge* createBisectingEdge( Site*, Site* );
+		void dispose( );
 
-		inline Vertex* leftVertex()
+		inline Vertex* leftVertex( )
 		{
 			return _leftVertex;
 		}
@@ -56,7 +53,7 @@ namespace Delaunay
 
 		inline Vertex* vertex( LR::Side leftRight )
 		{
-			return (leftRight == LR::LEFT) ? _leftVertex : _rightVertex;
+			return ( leftRight == LR::LEFT ) ? _leftVertex : _rightVertex;
 		}
 
 		inline void setVertex( LR::Side leftRight, Vertex* v )
@@ -67,42 +64,43 @@ namespace Delaunay
 				_rightVertex = v;
 		}
 
-		inline bool isPartOfConvexHull()
+		inline bool isPartOfConvexHull( )
 		{
-			return (_leftVertex == NULL || _rightVertex == NULL);
+			return ( _leftVertex == NULL || _rightVertex == NULL );
 		}
 
-		Number sitesDistance();
+		Number sitesDistance( );
 
-		static Number compareSitesDistances_MAX( Edge* edge0, Edge* edge1);
+		static Number compareSitesDistances_MAX( Edge* edge0, Edge* edge1 );
 		static Number compareSitesDistances( Edge* edge0, Edge* edge1 );
 
-		inline Point** clippedEnds()
+		inline Point** clippedEnds( )
 		{
 			return _clippedVertices;
 		}
 
 		// unless the entire Edge is outside the bounds.
 		// In that case visible will be false:
-		inline bool visible()
+		inline bool visible( )
 		{
-			return _clippedVertices != NULL;
+			return ( _clippedVertices[LR::LEFT] != NULL
+					&& _clippedVertices[LR::RIGHT] != NULL );
 		}
 
 		inline void leftSite( Site* s )
 		{
 			_sites[LR::LEFT] = s;
 		}
-		inline Site* leftSite()
+		inline Site* leftSite( )
 		{
 			return _sites[LR::LEFT];
 		}
 
-		inline void rightSite(Site* s)
+		inline void rightSite( Site* s )
 		{
 			_sites[LR::RIGHT] = s;
 		}
-		inline Site* rightSite()
+		inline Site* rightSite( )
 		{
 			return _sites[LR::RIGHT];
 		}
@@ -131,8 +129,8 @@ namespace Delaunay
 
 		static std::vector< Edge* > _pool;
 
-		static Edge* create();
-		void init();
+		static Edge* create( );
+		void init( );
 
 		static int _nedges;
 
@@ -141,17 +139,13 @@ namespace Delaunay
 		Vertex* _leftVertex;
 		Vertex* _rightVertex;
 
-
 		// Once clipVertices() is called, this Dictionary will hold two Points
 		// representing the clipped coordinates of the left and right ends...
 		Point* _clippedVertices[2];
 
-
 		// the two input Sites for which this Edge is a bisector:
 		Site* _sites[2];
 		int _edgeIndex;
-
-
 
 	};
 
