@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef VORONOI_H_
-#define VORONOI_H_
+#ifndef DELAUNAY_VORONOI_H_
+#define DELAUNAY_VORONOI_H_
 
 #include "geom/Triangle.h"
 #include "delaunay/SiteList.h"
@@ -40,7 +40,7 @@ namespace Delaunay
 		std::vector< LineSegment* > hull( );
 		std::vector< const Point* > hullPointsInOrder();
 		std::vector< LineSegment* > spanningTree( int type /* = "minimum" , keepOutMask:BitmapData = null */);
-		std::vector< const Point* > regions();
+		std::vector< std::vector< Point* > > regions();
 		std::vector< unsigned > siteColors( /* referenceImage:BitmapData = null */ );
 
 		/**
@@ -51,10 +51,11 @@ namespace Delaunay
 		 * @return coordinates of nearest Site to (x, y)
 		 *
 		 */
-		Point* nearestSitePoint( /* proximityMap:BitmapData,*/ Number x, Number y );
+		const Point* nearestSitePoint( /* proximityMap:BitmapData,*/ Number x, Number y );
 		std::vector< const Point* > siteCoords();
 
-		static Number compareByYThenX( const Site* s1, const Site* s2 );
+		template <class T>
+		static Number compareByYThenX( const Site* s1, T s2 );
 
 	private:
 		SiteList _sites;
@@ -67,11 +68,11 @@ namespace Delaunay
 		Rectangle _plotBounds;
 
 		void addSites( const std::vector<Point*>&, const std::vector<unsigned>*);
+		void addSite( Point* p, unsigned color, int index );
 		std::vector< Edge* > hullEdges( );
 
 		void fortunesAlgorithm();
 	};
-
 
 } /* namespace Delaunay */
 #endif /* VORONOI_H_ */

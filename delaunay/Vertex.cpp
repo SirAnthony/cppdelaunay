@@ -15,6 +15,7 @@ namespace Delaunay
 {
 	int Vertex::_nvertices = 0;
 	Vertex* Vertex::VERTEX_AT_INFINITY = new Vertex( NAN, NAN );
+	std::vector< Vertex* > Vertex::_pool;
 
 	Vertex::Vertex( Number x, Number y )
 	{
@@ -58,7 +59,7 @@ namespace Delaunay
 		_vertexIndex = _nvertices++;
 	}
 
-	Vertex* intersect( Halfedge* halfedge0, Halfedge* halfedge1 )
+	Vertex* Vertex::intersect( Halfedge* halfedge0, Halfedge* halfedge1 )
 	{
 		Edge* edge0;
 		Edge* edge1;

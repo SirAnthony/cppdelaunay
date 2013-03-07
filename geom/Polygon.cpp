@@ -4,7 +4,7 @@
  *  Created on: 06.03.2013
  */
 
-#include "Polygon.h"
+#include "geom/Polygon.h"
 #include <math.h>
 
 namespace Delaunay {
@@ -20,15 +20,15 @@ namespace Delaunay {
 
 	Number Polygon::area( )
 	{
-		return abs( signedDoubleArea() * 0.5 );
+		return fabs( signedDoubleArea() * 0.5 );
 	}
 
 	Winding::Direction Polygon::winding( )
 	{
-		Number signedDoubleArea = signedDoubleArea();
-		if( signedDoubleArea < 0 )
+		Number sDoubleArea = signedDoubleArea();
+		if( sDoubleArea < 0 )
 			return Winding::CLOCKWISE;
-		if( signedDoubleArea > 0 )
+		if( sDoubleArea > 0 )
 			return Winding::COUNTERCLOCKWISE;
 		return Winding::NONE;
 	}

@@ -11,7 +11,8 @@
 namespace Delaunay
 {
 	int Edge::_nedges = 0;
-
+	Edge* Edge::DELETED = new Edge();
+	std::vector< Edge* > Edge::_pool;
 
 	Edge::Edge( )
 	{

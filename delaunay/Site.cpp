@@ -15,8 +15,29 @@
 
 #define EPSILON .005
 
+
 namespace Delaunay
 {
+	std::vector< Site* > Site::_pool;
+
+	int BoundsCheck::check( const Point* point, const Rectangle& bounds )
+	{
+		int value = 0;
+		if( point->x == bounds.left() ){
+			value |= LEFT;
+		}
+		if( point->x == bounds.right() ){
+			value |= RIGHT;
+		}
+		if( point->y == bounds.top() ){
+			value |= TOP;
+		}
+		if( point->y == bounds.bottom() ){
+			value |= BOTTOM;
+		}
+		return value;
+	}
+
 
 	Site::Site( Point* p, int index, Number weight, unsigned color )
 	{
@@ -53,7 +74,7 @@ namespace Delaunay
 		_coord = p;
 		_siteIndex = index;
 		weight = w;
-		color = c;
+		_color = c;
 		_edges.clear( );
 		_region.clear( );
 		return this;
@@ -88,9 +109,8 @@ namespace Delaunay
 
 	std::vector< Point* > Site::region( const Rectangle& clippingBounds )
 	{
-		if( _edges.size( ) == 0 ){
+		if( _edges.size( ) == 0 )
 			return std::vector< Point* >();
-		}
 		// TODO: check if reordered but count is 0
 		if( _edgeOrientations.size( ) ){
 			reorderEdges( );

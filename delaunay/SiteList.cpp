@@ -4,12 +4,14 @@
  *  Created on: 06.03.2013
  */
 
-#include "SiteList.h"
+#include "delaunay/SiteList.h"
+#include "delaunay/Edge.h"
 
 namespace Delaunay {
 
 	SiteList::SiteList( )
 	{
+		_currentIndex = 0;
 		_sorted = false;
 	}
 
@@ -49,10 +51,10 @@ namespace Delaunay {
 		xmax = DELAUNAY_NUMBER_MIN;
 		for( std::vector<Site*>::iterator it = _sites.begin(); it != _sites.end(); ++it ){
 			Site* site = ( *it );
-			if( site->x < xmin )
-				xmin = site->x;
-			if( site->x > xmax )
-				xmax = site->x;
+			if( site->x() < xmin )
+				xmin = site->x();
+			if( site->x() > xmax )
+				xmax = site->x();
 		}
 		// here's where we assume that the sites have been sorted on y:
 		ymin = _sites[0]->y();
@@ -65,7 +67,7 @@ namespace Delaunay {
 	{
 		std::vector<unsigned> colors;
 		for( std::vector<Site*>::iterator it = _sites.begin(); it != _sites.end(); ++it )
-			colors.push_back( ( *it )->color );
+			colors.push_back( ( *it )->color() );
 		//referenceImage ? referenceImage.getPixel(site.x, site.y) :
 		return colors;
 	}
@@ -85,9 +87,9 @@ namespace Delaunay {
 			Site* site = ( *it );
 			Number radius = 0;
 			Edge* nearestEdge = site->nearestEdge();
-			if( !nearestEdge->isPartOfConvexHull() )
+			if( !(nearestEdge->isPartOfConvexHull()) )
 				radius = nearestEdge->sitesDistance() * 0.5;
-			circles.push_back( new Circle( site->x, site->y, radius ) );
+			circles.push_back( new Circle( site->x(), site->y(), radius ) );
 		}
 		return circles;
 	}

@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef EDGEREORDERER_H_
-#define EDGEREORDERER_H_
+#ifndef DELAUNAY_EDGEREORDERER_H_
+#define DELAUNAY_EDGEREORDERER_H_
 
 #include "delaunay/LR.h"
 #include "delaunay/Edge.h"
@@ -44,4 +44,4 @@ namespace Delaunay {
 	};
 }
 
-#endif /* EDGEREORDERER_H_ */
+#endif /* DELAUNAY_EDGEREORDERER_H_ */

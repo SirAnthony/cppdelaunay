@@ -4,8 +4,8 @@
  *  Created on: 06.03.2013
  */
 
-#ifndef CIRCLE_H_
-#define CIRCLE_H_
+#ifndef DELAUNAY_CIRCLE_H_
+#define DELAUNAY_CIRCLE_H_
 
 #include "geom/Point.h"
 #include "defines.h"
@@ -21,8 +21,7 @@ namespace Delaunay {
 
 		Point* center;
 		Number radius;
-
 	};
 
 } /* namespace Delaunay */
-#endif /* CIRCLE_H_ */
+#endif /* DELAUNAY_CIRCLE_H_ */

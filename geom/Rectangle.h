@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef RECTANGLE_H_
-#define RECTANGLE_H_
+#ifndef DELAUNAY_RECTANGLE_H_
+#define DELAUNAY_RECTANGLE_H_
 
 #include "defines.h"
 
@@ -16,8 +16,10 @@ namespace Delaunay
 	class Rectangle
 	{
 	public:
-		Rectangle( );
+		Rectangle( Number, Number, Number, Number );
+		Rectangle( const Rectangle& );
 		~Rectangle( );
+
 
 		inline Number bottom( ) const
 		{
@@ -64,4 +66,4 @@ namespace Delaunay
 	};
 
 } /* namespace Delaunay */
-#endif /* RECTANGLE_H_ */
+#endif /* DELAUNAY_RECTANGLE_H_ */

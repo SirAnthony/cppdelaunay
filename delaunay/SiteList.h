@@ -4,10 +4,11 @@
  *  Created on: 06.03.2013
  */
 
-#ifndef SITELIST_H_
-#define SITELIST_H_
+#ifndef DELAUNAY_SITELIST_H_
+#define DELAUNAY_SITELIST_H_
 
 #include "geom/Circle.h"
+#include "delaunay/Site.h"
 #include "defines.h"
 
 namespace Delaunay {
@@ -59,4 +60,4 @@ namespace Delaunay {
 	};
 
 } /* namespace Delaunay */
-#endif /* SITELIST_H_ */
+#endif /* DELAUNAY_SITELIST_H_ */

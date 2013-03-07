@@ -4,17 +4,22 @@
  *  Created on: 06.03.2013
  */
 
-#ifndef ICOORD_H_
-#define ICOORD_H_
+#ifndef DELAUNAY_ICOORD_H_
+#define DELAUNAY_ICOORD_H_
 
 #include "geom/Point.h"
 
-namespace Delaunay {
+namespace Delaunay
+{
 
 	class ICoord
 	{
-		inline const Point* coord() const;
+	public:
+		const Point* coord( ) const
+		{
+			return NULL;
+		}
 	};
 
 } /* namespace Delaunay */
-#endif /* ICOORD_H_ */
+#endif /* DELAUNAY_ICOORD_H_ */

@@ -4,8 +4,8 @@
  *  Created on: 06.03.2013
  */
 
-#ifndef TRIANGLE_H_
-#define TRIANGLE_H_
+#ifndef DELAUNAY_TRIANGLE_H_
+#define DELAUNAY_TRIANGLE_H_
 
 #include "delaunay/Site.h"
 
@@ -22,4 +22,4 @@ namespace Delaunay {
 	};
 
 } /* namespace Delaunay */
-#endif /* TRIANGLE_H_ */
+#endif /* DELAUNAY_TRIANGLE_H_ */

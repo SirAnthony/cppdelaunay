@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef HALFEDGE_H_
-#define HALFEDGE_H_
+#ifndef DELAUNAY_HALFEDGE_H_
+#define DELAUNAY_HALFEDGE_H_
 
 #include "geom/Point.h"
 #include "delaunay/Edge.h"
@@ -20,12 +20,12 @@ namespace Delaunay
 	class Halfedge
 	{
 	public:
-		Halfedge* create( Edge* edge, LR::Side lr );
-		Halfedge* createDummy();
+		static Halfedge* create( Edge* edge, LR::Side lr );
+		static Halfedge* createDummy();
 		void dispose();
 		void reallyDispose();
 
-		bool isLeftOf( Point* p );
+		bool isLeftOf( const Point* );
 
 		Halfedge* edgeListLeftNeighbor;
 		Halfedge* edgeListRightNeighbor;
@@ -48,4 +48,4 @@ namespace Delaunay
 	};
 
 } /* namespace Delaunay */
-#endif /* HALFEDGE_H_ */
+#endif /* DELAUNAY_HALFEDGE_H_ */

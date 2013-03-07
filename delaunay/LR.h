@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef LR_H_
-#define LR_H_
+#ifndef DELAUNAY_LR_H_
+#define DELAUNAY_LR_H_
 
 namespace Delaunay
 {
@@ -16,11 +16,8 @@ namespace Delaunay
 			LEFT = 0, RIGHT
 		};
 
-		int other( enum Side leftRight )
-		{
-			return leftRight == LEFT ? RIGHT : LEFT;
-		}
+		enum Side other( enum Side leftRight );
 	};
 
 } /* namespace Delaunay */
-#endif /* LR_H_ */
+#endif /* DELAUNAY_LR_H_ */

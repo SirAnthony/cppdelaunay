@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef POINT_H_
-#define POINT_H_
+#ifndef DELAUNAY_POINT_H_
+#define DELAUNAY_POINT_H_
 
 #include "defines.h"
 
@@ -30,4 +30,4 @@ namespace Delaunay
 	};
 
 } /* namespace Delaunay */
-#endif /* POINT_H_ */
+#endif /* DELAUNAY_POINT_H_ */

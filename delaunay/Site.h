@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef SITE_H_
-#define SITE_H_
+#ifndef DELAUNAY_SITE_H_
+#define DELAUNAY_SITE_H_
 
 #include "geom/Rectangle.h"
 #include "geom/Point.h"
@@ -34,24 +34,7 @@ namespace Delaunay
 		 * @return an int with the appropriate bits set if the Point lies on the corresponding bounds lines
 		 *
 		 */
-		int check( const Point* point, const Rectangle& bounds )
-		{
-			int value = 0;
-			if( point->x == bounds.left() ){
-				value |= LEFT;
-			}
-			if( point->x == bounds.right() ){
-				value |= RIGHT;
-			}
-			if( point->y == bounds.top() ){
-				value |= TOP;
-			}
-			if( point->y == bounds.bottom() ){
-				value |= BOTTOM;
-			}
-			return value;
-		}
-
+		int check( const Point* point, const Rectangle& bounds );
 	}
 
 	class Site : public ICoord
@@ -86,17 +69,22 @@ namespace Delaunay
 
 		std::vector< Point* > region( const Rectangle& clippingBounds );
 
-		inline Number x( )
+		inline Number x( ) const
 		{
 			return _coord->x;
 		}
 
-		inline Number y( )
+		inline Number y( ) const
 		{
 			return _coord->y;
 		}
 
-		inline Number dist( Site* p )
+		inline unsigned color()
+		{
+			return _color;
+		}
+
+		inline Number dist( ICoord* p )
 		{
 			return Point::distance( p->coord( ), this->_coord );
 		}
@@ -118,7 +106,7 @@ namespace Delaunay
 		static std::vector< Site* > _pool;
 
 		Point* _coord;
-		unsigned color;
+		unsigned _color;
 		Number weight;
 		unsigned _siteIndex;
 
@@ -146,4 +134,4 @@ namespace Delaunay
 	};
 
 } /* namespace Delaunay */
-#endif /* SITE_H_ */
+#endif /* DELAUNAY_SITE_H_ */

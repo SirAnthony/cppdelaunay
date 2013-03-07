@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef EDGE_H_
-#define EDGE_H_
+#ifndef DELAUNAY_EDGE_H_
+#define DELAUNAY_EDGE_H_
 
 #include "geom/LineSegment.h"
 #include "delaunay/Vertex.h"
@@ -123,6 +123,8 @@ namespace Delaunay
 		// the equation of the edge: ax + by = c
 		Number a, b, c;
 
+		static Edge* DELETED;
+
 	private:
 		Edge( );
 		~Edge( );
@@ -133,8 +135,6 @@ namespace Delaunay
 		void init();
 
 		static int _nedges;
-
-		//static const Edge* DELETED = new Edge();
 
 		// the two Voronoi vertices that the edge connects
 		//		(if one of them is null, the edge extends to infinity)
@@ -156,4 +156,4 @@ namespace Delaunay
 	};
 
 } /* namespace Delaunay */
-#endif /* EDGE_H_ */
+#endif /* DELAUNAY_EDGE_H_ */

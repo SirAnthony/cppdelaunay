@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef VERTEX_H_
-#define VERTEX_H_
+#ifndef DELAUNAY_VERTEX_H_
+#define DELAUNAY_VERTEX_H_
 
 #include "delaunay/ICoord.h"
 #include <vector>
@@ -50,7 +50,7 @@ namespace Delaunay
 		 * @return
 		 *
 		 */
-		Vertex* intersect( Halfedge* halfedge0, Halfedge* halfedge1 );
+		static Vertex* intersect( Halfedge* halfedge0, Halfedge* halfedge1 );
 
 		static Vertex* VERTEX_AT_INFINITY;
 
@@ -59,7 +59,7 @@ namespace Delaunay
 		~Vertex( );
 		Vertex* init( Number x, Number y );
 
-		static std::vector< Vertex* > _pool;;
+		static std::vector< Vertex* > _pool;
 		static int _nvertices;
 		Point* _coord;
 		int _vertexIndex;
@@ -68,4 +68,4 @@ namespace Delaunay
 	};
 
 } /* namespace Delaunay */
-#endif /* VERTEX_H_ */
+#endif /* DELAUNAY_VERTEX_H_ */

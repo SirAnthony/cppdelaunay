@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef LINESEGMENT_H_
-#define LINESEGMENT_H_
+#ifndef DELAUNAY_LINESEGMENT_H_
+#define DELAUNAY_LINESEGMENT_H_
 
 #include "geom/Point.h"
 
@@ -27,4 +27,4 @@ namespace Delaunay
 	};
 
 } /* namespace Delaunay */
-#endif /* LINESEGMENT_H_ */
+#endif /* DELAUNAY_LINESEGMENT_H_ */

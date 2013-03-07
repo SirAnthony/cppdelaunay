@@ -10,6 +10,9 @@
 namespace Delaunay
 {
 
+	std::vector< Halfedge* > Halfedge::_pool;
+
+
 	Halfedge::Halfedge( Edge* edge, LR::Side lr )
 	{
 		init( edge, lr );
@@ -70,7 +73,7 @@ namespace Delaunay
 		return this;
 	}
 
-	bool Halfedge::isLeftOf( Point* p )
+	bool Halfedge::isLeftOf( const Point* p )
 	{
 		Site* topSite;
 		bool rightOfSite, above, fast;

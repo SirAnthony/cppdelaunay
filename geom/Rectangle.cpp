@@ -10,10 +10,20 @@
 namespace Delaunay
 {
 
-	Rectangle::Rectangle( )
+	Rectangle::Rectangle( Number xmin, Number ymin, Number w, Number h )
 	{
-		// TODO Auto-generated constructor stub
+		X = xmin;
+		Y = ymin;
+		Width = w;
+		Height = h;
+	}
 
+	Rectangle::Rectangle( const Rectangle& r )
+	{
+		X = r.x();
+		Y = r.y();
+		Width = r.width();
+		Height = r.height();
 	}
 
 	Rectangle::~Rectangle( )
