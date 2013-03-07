@@ -9,7 +9,7 @@
 #include "delaunay/Edge.h"
 #include "delaunay/Halfedge.h"
 #include "delaunay/Voronoi.h"
-#include <math.h>
+#include "math.h"
 
 namespace Delaunay
 {

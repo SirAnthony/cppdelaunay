@@ -24,7 +24,8 @@ namespace Delaunay
 		/*
 		 * Returns the distance between pt1 and pt2.
 		 */
-		Number static distance( const Point*, const Point* );
+		static Number distance( const Point*, const Point* );
+		static Point* interpolate( const Point*, const Point*, Number delta );
 
 
 	};

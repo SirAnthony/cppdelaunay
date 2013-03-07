@@ -11,6 +11,7 @@ namespace Delaunay {
 
 	SiteList::SiteList( )
 	{
+		_sites.clear();
 		_currentIndex = 0;
 		_sorted = false;
 	}

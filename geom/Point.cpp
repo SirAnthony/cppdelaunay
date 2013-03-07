@@ -25,4 +25,10 @@ namespace Delaunay
 						+ (v1->y - v2->y) * (v1->y - v2->y) );
 	}
 
+	Point* interpolate( const Point* first, const Point* second, Number delta )
+	{
+		return new Point( first->x + delta * ( second->x - first->x ),
+				first->y + delta * ( second->y - first->y ) );
+	}
+
 } /* namespace Delaunay */
