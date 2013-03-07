@@ -189,29 +189,24 @@ namespace Delaunay
 	{
 		std::vector< Point* > points;
 		int n = _edges.size( );
-		int i = 0;
-		Edge* edge;
-		while( i < n && (_edges[i]->visible() == false) )
-			++i;
-
-		if( i == n ){
-			// no edges visible
-			return points;
-		}
-
-		edge = _edges[i];
-		LR::Side orientation = _edgeOrientations[i];
-		points.push_back( edge->clippedEnds()[orientation] );
-		points.push_back( edge->clippedEnds()[LR::other( orientation )] );
-
-		for( int j = i + 1; j < n; ++j ){
-			edge = _edges[j];
-			if( !edge || edge->visible() == false )
+		int i = -1;
+		for( int j = 0; j < n; ++j ){
+			Edge* edge = _edges[j];
+			if( !edge || !edge->visible() )
 				continue;
-			connect( points, j, bounds );
+			if( i >= 0 ){
+				connect( points, j, bounds );
+			}else{
+				i = j;
+				LR::Side orientation = _edgeOrientations[j];
+				points.push_back( edge->clippedEnds()[orientation] );
+				points.push_back( edge->clippedEnds()[LR::other( orientation )] );
+			}
 		}
+
 		// close up the polygon by adding another corner point of the bounds if needed:
-		connect( points, i, bounds, true );
+		if( i >= 0 )
+			connect( points, i, bounds, true );
 
 		return points;
 	}

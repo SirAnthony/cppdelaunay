@@ -32,7 +32,6 @@ namespace Delaunay {
 	Site* SiteList::next( )
 	{
 		if( _sorted && _currentIndex < _sites.size() )
-
 			return _sites[_currentIndex++];
 		return NULL;
 	}
