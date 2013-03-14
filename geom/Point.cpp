@@ -20,9 +20,9 @@ namespace Delaunay
 	}
 
 	Number Point::distance( const Point* v1, const Point* v2 ) {
-		return sqrt(
-				(v1->x - v2->x) * (v1->x - v2->x)
-						+ (v1->y - v2->y) * (v1->y - v2->y) );
+		float dx = v1->x - v2->x;
+		float dy = v1->y - v2->y;
+		return sqrt( dx * dx + dy * dy );
 	}
 
 	Point* interpolate( const Point* first, const Point* second, Number delta )

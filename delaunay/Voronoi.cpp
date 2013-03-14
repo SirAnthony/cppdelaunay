@@ -127,6 +127,11 @@ namespace Delaunay
 		return _sites.regions( _plotBounds );
 	}
 
+	void Voronoi::regionsPrepare( )
+	{
+		_sites.regionsPrepare( _plotBounds );
+	}
+
 	std::vector< unsigned > Voronoi::siteColors( /* referenceImage:BitmapData = null */)
 	{
 		return _sites.siteColors( /* referenceImage */);
@@ -244,7 +249,7 @@ namespace Delaunay
 			if( newSite != NULL
 					&& (heap.empty( ) || compareByYThenX( newSite, newintstar ) < 0) ){
 				// new site is smallest
-				//trace("smallest: new site " + newSite);
+				newSite->out(); //trace("smallest: new site " + newSite);
 
 				// Step 8:
 				lbnd = edgeList.edgeListLeftNeighbor( newSite->coord( ) );// the Halfedge just to the left of newSite

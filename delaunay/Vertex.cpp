@@ -11,6 +11,10 @@
 #include "delaunay/Voronoi.h"
 #include "math.h"
 
+#ifdef DELAUNAY_DEBUG
+	#include <stdio.h>
+#endif
+
 namespace Delaunay
 {
 	int Vertex::_nvertices = 0;
@@ -24,7 +28,8 @@ namespace Delaunay
 
 	Vertex::~Vertex( )
 	{
-		// TODO Auto-generated destructor stub
+		if( _coord )
+			delete _coord;
 	}
 
 	Vertex* Vertex::init( Number x, Number y )
@@ -50,13 +55,24 @@ namespace Delaunay
 
 	void Vertex::dispose( )
 	{
-		delete _coord, _coord = NULL;
+		if( _coord )
+			delete _coord, _coord = NULL;
 		_pool.push_back( this );
 	}
 
 	void Vertex::setIndex( )
 	{
 		_vertexIndex = _nvertices++;
+		out();
+	}
+
+	void Vertex::out( )
+	{
+#if DELAUNAY_DEBUG == 1
+	printf("v %f %f\n", _coord->x, _coord->y);
+#elif DELAUNAY_DEBUG > 1
+	printf("vertex(%d) at %f %f\n", _vertexIndex, _coord->x, _coord->y);
+#endif
 	}
 
 	Vertex* Vertex::intersect( Halfedge* halfedge0, Halfedge* halfedge1 )
@@ -76,7 +92,7 @@ namespace Delaunay
 			return NULL;
 
 		determinant = edge0->a * edge1->b - edge0->b * edge1->a;
-		if( -1.0e-10 < determinant && determinant < 1.0e-10 ) // the edges are parallel
+		if( ( -1.0e-10 < determinant ) && ( determinant < 1.0e-10 ) ) // the edges are parallel
 			return NULL;
 
 		intersectionX = (edge0->c * edge1->b - edge1->c * edge0->b)/determinant;
@@ -89,7 +105,7 @@ namespace Delaunay
 			halfedge = halfedge1;
 			edge = edge1;
 		}
-		rightOfSite = intersectionX >= edge->rightSite()->x();
+		rightOfSite = ( intersectionX >= edge->rightSite()->x() );
 		if ((rightOfSite && halfedge->leftRight == LR::LEFT)
 				||  (!rightOfSite && halfedge->leftRight == LR::RIGHT))
 			return NULL;

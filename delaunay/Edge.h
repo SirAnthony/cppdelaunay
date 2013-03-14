@@ -56,13 +56,7 @@ namespace Delaunay
 			return ( leftRight == LR::LEFT ) ? _leftVertex : _rightVertex;
 		}
 
-		inline void setVertex( LR::Side leftRight, Vertex* v )
-		{
-			if( leftRight == LR::LEFT )
-				_leftVertex = v;
-			else
-				_rightVertex = v;
-		}
+		void setVertex( LR::Side leftRight, Vertex* v );
 
 		inline bool isPartOfConvexHull( )
 		{
@@ -117,6 +111,9 @@ namespace Delaunay
 		 *
 		 */
 		void clipVertices( const Rectangle& bounds );
+
+		void out();
+		void outEnd();
 
 		// the equation of the edge: ax + by = c
 		Number a, b, c;

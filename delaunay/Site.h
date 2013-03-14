@@ -62,12 +62,20 @@ namespace Delaunay
 
 		std::vector< Site* > neighborSites( );
 
+		void regionPrepare( const Rectangle& clippingBounds );
 		std::vector< Point* > region( const Rectangle& clippingBounds );
 
 		inline unsigned color()
 		{
 			return _color;
 		}
+
+		inline unsigned index()
+		{
+			return _siteIndex;
+		}
+
+		void out();
 
 	private:
 		/**
@@ -96,6 +104,7 @@ namespace Delaunay
 
 		// which end of each edge hooks up with the previous edge in _edges:
 		std::vector< LR::Side > _edgeOrientations;
+		bool _edgeReordered;
 
 		// ordered list of points that define the region clipped to bounds:
 		std::vector< Point* > _region;

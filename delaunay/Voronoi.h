@@ -42,6 +42,7 @@ namespace Delaunay
 		std::vector< LineSegment* > spanningTree(
 				enum KruskalType type = ktMinimum /* , keepOutMask:BitmapData = null */);
 		std::vector< std::vector< Point* > > regions( );
+		void regionsPrepare( );
 		std::vector< unsigned > siteColors( /* referenceImage:BitmapData = null */);
 
 		/**

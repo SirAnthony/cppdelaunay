@@ -39,6 +39,7 @@ namespace Delaunay {
 		std::vector< Circle* > circles();
 
 		std::vector< std::vector< Point*> > regions( const Rectangle& );
+		void regionsPrepare( const Rectangle& );
 
 
 		/**

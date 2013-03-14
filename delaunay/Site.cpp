@@ -13,6 +13,10 @@
 #include <algorithm>
 #include <vector>
 
+#ifdef DELAUNAY_DEBUG
+	#include <stdio.h>
+#endif
+
 #define EPSILON .005
 
 
@@ -77,6 +81,8 @@ namespace Delaunay
 		_color = c;
 		_edges.clear( );
 		_region.clear( );
+		_edgeOrientations.clear();
+		_edgeReordered = false;
 		return this;
 	}
 
@@ -96,10 +102,9 @@ namespace Delaunay
 		if( _edges.size( ) == 0 ){
 			return std::vector< Site* >();
 		}
-		// TODO: check if reordered but count is 0
-		if( _edgeOrientations.size( ) == 0 ){
+		if( !_edgeReordered )
 			reorderEdges( );
-		}
+
 		std::vector< Site* > list;
 		for( std::vector< Edge* >::iterator it = _edges.begin( ); it != _edges.end( ); ++it ){
 			list.push_back( neighborSite( *it ) );
@@ -107,19 +112,34 @@ namespace Delaunay
 		return list;
 	}
 
+	void Site::regionPrepare( const Rectangle& clippingBounds )
+	{
+		if( _edgeReordered )
+			return;
+
+		reorderEdges( );
+		_region = clipToBounds( clippingBounds );
+		if( Polygon( _region ).winding( ) == Winding::CLOCKWISE )
+			std::reverse( _region.begin(), _region.end() );
+	}
+
 	std::vector< Point* > Site::region( const Rectangle& clippingBounds )
 	{
 		if( _edges.size( ) == 0 )
 			return std::vector< Point* >();
-		// TODO: check if reordered but count is 0
-		if( _edgeOrientations.size( ) == 0 ){
-			reorderEdges( );
-			_region = clipToBounds( clippingBounds );
-			if( Polygon( _region ).winding( ) == Winding::CLOCKWISE )
-				std::reverse( _region.begin(), _region.end() );
-		}
+		regionPrepare( clippingBounds );
 		return _region;
 	}
+
+	void Site::out( )
+	{
+#if DELAUNAY_DEBUG == 1
+		printf("s %f %f\n", _coord->x, _coord->y);
+#elif DELAUNAY_DEBUG > 1
+		printf("site (%d) at %f %f\n", _siteIndex, _coord->x, _coord->y);
+#endif
+	}
+
 
 	int Site::compareInt( Site* s1, Site* s2 )
 	{
@@ -183,6 +203,7 @@ namespace Delaunay
 		EdgeReorderer reorderer( _edges, EdgeReorderer::cVertex );
 		_edges = reorderer.edges();
 		_edgeOrientations = reorderer.edgeOrientations();
+		_edgeReordered = true;
 	}
 
 	std::vector< Point* > Site::clipToBounds( const Rectangle& bounds )

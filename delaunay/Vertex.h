@@ -29,6 +29,8 @@ namespace Delaunay
 
 		void setIndex();
 
+		void out();
+
 		/**
 		 * This is the only way to make a Vertex
 		 *

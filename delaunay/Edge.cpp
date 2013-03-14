@@ -7,6 +7,11 @@
 
 #include "Edge.h"
 #include "defines.h"
+#include "math.h"
+#ifdef DELAUNAY_DEBUG
+	#include <stdio.h>
+#endif
+
 
 namespace Delaunay
 {
@@ -41,22 +46,6 @@ namespace Delaunay
 	Edge* Edge::createBisectingEdge( Site* site0, Site* site1 )
 	{
 		Number dx, dy, absdx, absdy;
-		Number a, b, c;
-
-		dx = site1->x() - site0->x();
-		dy = site1->y() - site0->y();
-		absdx = dx > 0 ? dx : -dx;
-		absdy = dy > 0 ? dy : -dy;
-		c = site0->x() * dx + site0->y() * dy + (dx * dx + dy * dy) * 0.5;
-		if( absdx > absdy ){
-			a = 1.0;
-			b = dy / dx;
-			c /= dx;
-		}else{
-			b = 1.0;
-			a = dx / dy;
-			c /= dy;
-		}
 
 		Edge* edge = Edge::create( );
 		edge->leftSite( site0 );
@@ -64,12 +53,22 @@ namespace Delaunay
 		site0->addEdge( edge );
 		site1->addEdge( edge );
 
-		edge->_leftVertex = NULL;
-		edge->_rightVertex = NULL;
+		dx = site1->x() - site0->x();
+		dy = site1->y() - site0->y();
+		absdx = dx > 0 ? dx : -dx;
+		absdy = dy > 0 ? dy : -dy;
+		edge->c = site0->x() * dx + site0->y() * dy + (dx * dx + dy * dy) * 0.5;
+		if( absdx > absdy ){
+			edge->a = 1.0;
+			edge->b = dy / dx;
+			edge->c /= dx;
+		}else{
+			edge->b = 1.0;
+			edge->a = dx / dy;
+			edge->c /= dy;
+		}
 
-		edge->a = a;
-		edge->b = b;
-		edge->c = c;
+		edge->out();
 		//trace("createBisectingEdge: a ", edge.a, "b", edge.b, "c", edge.c);
 
 		return edge;
@@ -89,6 +88,16 @@ namespace Delaunay
 		_sites[LR::RIGHT] = NULL;
 
 		_pool.push_back( this );
+	}
+
+	void Edge::setVertex( LR::Side leftRight, Vertex* v )
+	{
+		if( leftRight == LR::LEFT )
+			_leftVertex = v;
+		else
+			_rightVertex = v;
+		if( vertex( LR::other( leftRight ) ) )
+			outEnd();
 	}
 
 	Number Edge::sitesDistance( )
@@ -206,6 +215,29 @@ namespace Delaunay
 			_clippedVertices[LR::RIGHT] = new Point( x0, y0 );
 			_clippedVertices[LR::LEFT] = new Point( x1, y1 );
 		}
+
+#ifdef DELAUNAY_DEBUG
+		printf( "cl %f %f %f %f\n", x0, y0, x1, y1 );
+#endif
+	}
+
+	void Edge::out()
+	{
+#if DELAUNAY_DEBUG == 1
+		printf("l %f %f %f\n", a, b, c);
+#elif DELAUNAY_DEBUG > 1
+		printf( "line(%d) %gx+%gy=%g, bisecting %d %d\n", _edgeIndex, a, b, c,
+				leftSite()->index(), rightSite()->index() );
+#endif
+	}
+
+	void Edge::outEnd()
+	{
+#ifdef DELAUNAY_DEBUG
+		printf( "e %d", _edgeIndex );
+		printf( " %d ", _leftVertex != NULL ? _leftVertex->vertexIndex() : -1 );
+		printf( "%d\n", _rightVertex != NULL ? _rightVertex->vertexIndex() : -1 );
+#endif
 	}
 
 	Edge* Edge::create( )

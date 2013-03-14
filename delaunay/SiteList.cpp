@@ -102,6 +102,12 @@ namespace Delaunay {
 		return regions;
 	}
 
+	void SiteList::regionsPrepare( const Rectangle& plotBounds )
+	{
+		for( std::vector< Site* >::iterator it = _sites.begin(); it != _sites.end(); ++it )
+			(*it)->regionPrepare( plotBounds );
+	}
+
 	const Point* SiteList::nearestSitePoint( /*proximityMap:BitmapData,*/ Number x, Number y )
 	{
 		//unsigned index = proximityMap.getPixel(x, y);

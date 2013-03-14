@@ -33,15 +33,15 @@ namespace Delaunay
 		if( insertionBucket < _minBucket )
 			_minBucket = insertionBucket;
 		previous = _hash[insertionBucket];
-		while( (next = previous->nextInPriorityQueue) != NULL
-				&& (halfEdge->ystar > next->ystar
-						|| (halfEdge->ystar == next->ystar
-								&& halfEdge->vertex->x( ) > next->vertex->x( ))) ){
+		while( (next = previous->nextInPriorityQueue) != NULL &&
+				(halfEdge->ystar > next->ystar ||
+				(halfEdge->ystar == next->ystar &&
+				 halfEdge->vertex->x( ) > next->vertex->x( ))) ){
 			previous = next;
 		}
 		halfEdge->nextInPriorityQueue = previous->nextInPriorityQueue;
 		previous->nextInPriorityQueue = halfEdge;
-		++_count;
+		_count++;
 	}
 
 	void HalfedgePriorityQueue::remove( Halfedge* halfEdge )

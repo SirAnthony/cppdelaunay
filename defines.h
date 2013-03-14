@@ -17,6 +17,8 @@ namespace Delaunay{
 #define DELAUNAY_NUMBER_MAX FLT_MAX
 #define DELAUNAY_NUMBER_MIN FLT_MIN
 
+//#define	DELAUNAY_DEBUG 0
+
 }
 
 

@@ -56,8 +56,8 @@ namespace Delaunay
 
 	void EdgeList::insert( Halfedge* lb, Halfedge* newHalfedge )
 	{
-		newHalfedge->edgeListRightNeighbor = lb->edgeListRightNeighbor;
 		newHalfedge->edgeListLeftNeighbor = lb;
+		newHalfedge->edgeListRightNeighbor = lb->edgeListRightNeighbor;
 		lb->edgeListRightNeighbor->edgeListLeftNeighbor = newHalfedge;
 		lb->edgeListRightNeighbor = newHalfedge;
 	}
@@ -104,7 +104,7 @@ namespace Delaunay
 		}
 
 		/* Update hash table and reference counts */
-		if( bucket > 0 && bucket < _hashsize - 1 )
+		if( bucket > 0 && ( bucket < _hashsize - 1 ) )
 			_hash[bucket] = halfEdge;
 
 		return halfEdge;
