@@ -14,6 +14,7 @@
 #include "delaunay/LR.h"
 #include "defines.h"
 #include <vector>
+#include <list>
 
 
 namespace Delaunay
@@ -42,6 +43,8 @@ namespace Delaunay
 	public:
 		Site( Point* p, int index, Number weight, unsigned color );
 		~Site( );
+
+		static void clean();
 
 		static Site* create( Point* p, int index, Number weight, unsigned color );
 		void dispose( );
@@ -93,7 +96,8 @@ namespace Delaunay
 
 		static bool closeEnough( const Point* p0, const Point* p1 );
 
-		static std::vector< Site* > _pool;
+		static std::list< Site* > _pool;
+		static int _count;
 
 		unsigned _color;
 		Number weight;

@@ -9,6 +9,7 @@
 #define DELAUNAY_LINESEGMENT_H_
 
 #include "geom/Point.h"
+#include <list>
 
 namespace Delaunay
 {
@@ -16,14 +17,21 @@ namespace Delaunay
 	class LineSegment
 	{
 	public:
-		LineSegment( const Point*, const Point* );
-		~LineSegment( );
+		static LineSegment* create( const Point*, const Point* );
+		static void clean();
+		void dispose();
 
 		static Number compareLengths_MAX( const LineSegment*, const LineSegment* );
 		static Number compareLengths( const LineSegment*, const LineSegment* );
 
 		const Point* p0;
 		const Point* p1;
+	private:
+		LineSegment( const Point*, const Point* );
+		~LineSegment( );
+		void init( const Point*, const Point* );
+
+		static std::list< LineSegment* > _pool;
 	};
 
 } /* namespace Delaunay */

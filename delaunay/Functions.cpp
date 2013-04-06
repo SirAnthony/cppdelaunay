@@ -26,7 +26,7 @@ namespace Delaunay {
 			if( edge->visible() ){
 				Point* p1 = edge->clippedEnds()[LR::LEFT];
 				Point* p2 = edge->clippedEnds()[LR::RIGHT];
-				segments.push_back( new LineSegment( p1, p2 ) );
+				segments.push_back( LineSegment::create( p1, p2 ) );
 			}
 		}
 
@@ -52,16 +52,16 @@ namespace Delaunay {
 		//if (keepOutMask == null)
 		return edgesToTest;
 		/*
-		 var zeroPoint:Point = new Point();
-		 return edgesToTest.filter(myTest);
+		var zeroPoint:Point = new Point();
+		return edgesToTest.filter(myTest);
 
-		 function myTest(edge:Edge, index:int, vector:Vector.<Edge>):Boolean
-		 {
-		 var delaunayLineBmp:BitmapData = edge.makeDelaunayLineBmp();
-		 var notIntersecting:Boolean = !(keepOutMask.hitTest(zeroPoint, 1, delaunayLineBmp, zeroPoint, 1));
-		 delaunayLineBmp.dispose();
-		 return notIntersecting;
-		 }*/
+		function myTest(edge:Edge, index:int, vector:Vector.<Edge>):Boolean
+		{
+		var delaunayLineBmp:BitmapData = edge.makeDelaunayLineBmp();
+		var notIntersecting:Boolean = !(keepOutMask.hitTest(zeroPoint, 1, delaunayLineBmp, zeroPoint, 1));
+		delaunayLineBmp.dispose();
+		return notIntersecting;
+		}*/
 	}
 
 } /* namespace Delaunay */

@@ -15,6 +15,8 @@ namespace Delaunay
 	class ICoord
 	{
 	public:
+		ICoord() :  _coord(NULL) {};
+
 		inline const Point* coord( ) const
 		{
 			return _coord;

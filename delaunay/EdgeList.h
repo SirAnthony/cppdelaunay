@@ -23,6 +23,8 @@ namespace Delaunay
 		Halfedge* leftEnd( );
 		Halfedge* rightEnd( );
 
+		void dispose( );
+
 		/**
 		 * Insert newHalfedge to the right of lb
 		 * @param lb

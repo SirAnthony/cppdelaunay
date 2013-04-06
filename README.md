@@ -7,4 +7,4 @@ This library is port and interpritation of actionscript library [as3delaunay](ht
 
 Because opensource, that's why
 
-TODO: It is leaks as Yenisei at spring and needs more pool cleaners.
+TODO: It is too slow, std makes it's work well.

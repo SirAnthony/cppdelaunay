@@ -10,7 +10,7 @@
 namespace Delaunay
 {
 
-	std::vector< Halfedge* > Halfedge::_pool;
+	std::list< Halfedge* > Halfedge::_pool;
 
 
 	Halfedge::Halfedge( Edge* edge, LR::Side lr )
@@ -18,12 +18,23 @@ namespace Delaunay
 		init( edge, lr );
 	}
 
+	void Halfedge::clean( )
+	{
+		_pool.sort();
+		_pool.unique( );
+		for( std::list< Halfedge* >::iterator it = _pool.begin( ), end = _pool.end( );
+				it != end; ++it ){
+			delete (*it);
+		}
+		_pool.clear();
+	}
+
 	Halfedge* Halfedge::create( Edge* edge, LR::Side lr )
 	{
 		Halfedge* halfedge;
 		if( _pool.size( ) > 0 ){
-			halfedge = _pool.back( );
-			_pool.pop_back( );
+			halfedge = _pool.front( );
+			_pool.pop_front( );
 			halfedge->init( edge, lr );
 		}else{
 			halfedge = new Halfedge( edge, lr );
@@ -68,8 +79,11 @@ namespace Delaunay
 	{
 		edge = e;
 		leftRight = lr;
+		edgeListLeftNeighbor = NULL;
+		edgeListRightNeighbor = NULL;
 		nextInPriorityQueue = NULL;
 		vertex = NULL;
+		ystar = 0;
 		return this;
 	}
 

@@ -14,6 +14,8 @@
 #include "delaunay/Site.h"
 #include "defines.h"
 #include <vector>
+#include <list>
+
 
 namespace Delaunay
 {
@@ -28,6 +30,9 @@ namespace Delaunay
 		 */
 
 	public:
+		static void clean();
+
+
 		LineSegment* delaunayLine( );
 		LineSegment* voronoiEdge( );
 
@@ -124,7 +129,7 @@ namespace Delaunay
 		Edge( );
 		~Edge( );
 
-		static std::vector< Edge* > _pool;
+		static std::list< Edge* > _pool;
 
 		static Edge* create( );
 		void init( );

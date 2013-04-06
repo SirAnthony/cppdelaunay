@@ -10,14 +10,14 @@ namespace Delaunay {
 
 	Circle::Circle( Number centerX, Number centerY, Number r )
 	{
-		center = new Point(centerX, centerY);
+		center = Point::create(centerX, centerY);
 		radius = r;
 
 	}
 
 	Circle::~Circle( )
 	{
-		delete center;
+		center->dispose();
 	}
 
 } /* namespace Delaunay */

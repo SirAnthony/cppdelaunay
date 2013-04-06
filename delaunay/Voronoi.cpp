@@ -15,22 +15,40 @@
 
 namespace Delaunay
 {
+	int Voronoi::_instances = 0;
+
 
 	Voronoi::Voronoi( const std::vector< Point* >& points,
 			const std::vector< unsigned >* colors, Rectangle& plotBounds ) :
-			_plotBounds( plotBounds )
+			_plotBounds( plotBounds ), _sites( NULL )
 	{
+		_instances++;
 		addSites( points, colors );
 		fortunesAlgorithm( );
 	}
 
 	Voronoi::~Voronoi( )
 	{
+		_sitesIndexedByLocation.clear( );
+		delete _sites;
 		int n = _edges.size( );
 		for( int i = 0; i < n; ++i ){
 			_edges[i]->dispose( );
 		}
-		_sitesIndexedByLocation.clear( );
+		_instances--;
+		clean();
+	}
+
+	void Voronoi::clean()
+	{
+		if( _instances <=0 ){
+			Halfedge::clean();
+			Edge::clean();
+			Site::clean();
+			Vertex::clean();
+			LineSegment::clean();
+			Point::clean();
+		}
 	}
 
 	const Rectangle& Voronoi::plotBounds( )
@@ -124,28 +142,28 @@ namespace Delaunay
 
 	std::vector< std::vector< Point* > > Voronoi::regions( )
 	{
-		return _sites.regions( _plotBounds );
+		return _sites->regions( _plotBounds );
 	}
 
 	void Voronoi::regionsPrepare( )
 	{
-		_sites.regionsPrepare( _plotBounds );
+		_sites->regionsPrepare( _plotBounds );
 	}
 
 	std::vector< unsigned > Voronoi::siteColors( /* referenceImage:BitmapData = null */)
 	{
-		return _sites.siteColors( /* referenceImage */);
+		return _sites->siteColors( /* referenceImage */);
 	}
 
 	const Point* Voronoi::nearestSitePoint( /* proximityMap:BitmapData,*/Number x,
 			Number y )
 	{
-		return _sites.nearestSitePoint( /*proximityMap,*/x, y );
+		return _sites->nearestSitePoint( /*proximityMap,*/x, y );
 	}
 
 	std::vector< const Point* > Voronoi::siteCoords( )
 	{
-		return _sites.siteCoords( );
+		return _sites->siteCoords( );
 	}
 
 	template<>
@@ -179,6 +197,9 @@ namespace Delaunay
 	void Voronoi::addSites( const std::vector< Point* >& points,
 			const std::vector< unsigned >* colors )
 	{
+		if( !_sites )
+			_sites = new SiteList();
+
 		unsigned length = points.size( );
 		for( unsigned i = 0; i < length; ++i ){
 			addSite( points[i], colors ? colors->at( i ) : 0, i );
@@ -189,7 +210,7 @@ namespace Delaunay
 	{
 		Number weight = random( ) * 100;
 		Site* site = Site::create( p, index, weight, color );
-		_sites.push(site);
+		_sites->push(site);
 		_sitesIndexedByLocation[p] = site;
 	}
 
@@ -225,22 +246,22 @@ namespace Delaunay
 	void Voronoi::fortunesAlgorithm( )
 	{
 		Site *newSite, *bottomSite, *topSite, *tempSite;
-		Vertex *v, *vertex;
-		Point* newintstar;
+		Vertex *v, *vertex = NULL;
+		Point* newintstar = NULL;
 		LR::Side leftRight;
 		Halfedge *lbnd, *rbnd, *llbnd, *rrbnd, *bisector;
 		Edge* edge;
 
-		const Rectangle& dataBounds = _sites.sitesBounds( );
+		const Rectangle& dataBounds = _sites->sitesBounds( );
 
-		int sqrt_nsites = (int) sqrt( _sites.length( ) + 4 );
+		int sqrt_nsites = (int) sqrt( _sites->length( ) + 4 );
 		HalfedgePriorityQueue heap( dataBounds.y( ), dataBounds.height( ), sqrt_nsites );
 		EdgeList edgeList( dataBounds.x( ), dataBounds.width( ), sqrt_nsites );
 		std::vector< Halfedge* > halfEdges;
 		std::vector< Vertex* > vertices;
 
-		Site* bottomMostSite = _sites.next( );
-		newSite = _sites.next( );
+		Site* bottomMostSite = _sites->next( );
+		newSite = _sites->next( );
 
 		while( true ){
 			if( heap.empty( ) == false )
@@ -295,7 +316,7 @@ namespace Delaunay
 					heap.insert( bisector );
 				}
 
-				newSite = _sites.next( );
+				newSite = _sites->next( );
 			}else if( heap.empty( ) == false ){
 				//intersection is smallest
 				lbnd = heap.extractMin( );
@@ -344,7 +365,14 @@ namespace Delaunay
 			}else{
 				break;
 			}
+
+			if( newintstar ){
+				newintstar->dispose();
+				newintstar = NULL;
+			}
 		}
+
+		edgeList.dispose();
 
 		// heap should be empty now
 		for( std::vector< Halfedge* >::iterator it = halfEdges.begin( );

@@ -36,7 +36,7 @@ namespace Delaunay
 		while( (next = previous->nextInPriorityQueue) != NULL &&
 				(halfEdge->ystar > next->ystar ||
 				(halfEdge->ystar == next->ystar &&
-				 halfEdge->vertex->x( ) > next->vertex->x( ))) ){
+				halfEdge->vertex->x( ) > next->vertex->x( ))) ){
 			previous = next;
 		}
 		halfEdge->nextInPriorityQueue = previous->nextInPriorityQueue;
@@ -71,7 +71,7 @@ namespace Delaunay
 	{
 		adjustMinBucket( );
 		Halfedge* answer = _hash[_minBucket]->nextInPriorityQueue;
-		return new Point( answer->vertex->x( ), answer->ystar );
+		return Point::create( answer->vertex->x( ), answer->ystar );
 	}
 
 	Halfedge* HalfedgePriorityQueue::extractMin()

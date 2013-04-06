@@ -25,8 +25,12 @@ namespace Delaunay
 				const std::vector< unsigned >* colors, Rectangle& plotBounds );
 		~Voronoi( );
 
+		static void clean();
+
 		const Rectangle& plotBounds( );
 		const std::vector< Edge* >& edges( );
+
+		/** Points must be disposed. */
 		std::vector< Point* > region( Point* p );
 
 		// TODO: bug: if you call this before you call region(), something goes wrong :(
@@ -60,7 +64,7 @@ namespace Delaunay
 		static Number compareByYThenX( const Site* s1, T s2 );
 
 	private:
-		SiteList _sites;
+		SiteList* _sites;
 		std::map< Point*, Site* > _sitesIndexedByLocation;
 		std::vector< Triangle > _triangles;
 		std::vector< Edge* > _edges;
@@ -74,6 +78,8 @@ namespace Delaunay
 		std::vector< Edge* > hullEdges( );
 
 		void fortunesAlgorithm( );
+
+		static int _instances;
 	};
 
 } /* namespace Delaunay */

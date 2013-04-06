@@ -12,6 +12,7 @@
 #include "delaunay/Edge.h"
 #include "delaunay/LR.h"
 #include "delaunay/Vertex.h"
+#include <list>
 
 
 namespace Delaunay
@@ -20,6 +21,8 @@ namespace Delaunay
 	class Halfedge
 	{
 	public:
+		static void clean();
+
 		static Halfedge* create( Edge* edge, LR::Side lr );
 		static Halfedge* createDummy();
 		void dispose();
@@ -42,7 +45,7 @@ namespace Delaunay
 		Halfedge( Edge* edge, LR::Side lr );
 		~Halfedge( );
 
-		static std::vector< Halfedge* > _pool;
+		static std::list< Halfedge* > _pool;
 
 		Halfedge* init( Edge* edge, LR::Side lr );
 	};

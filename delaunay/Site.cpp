@@ -22,7 +22,8 @@
 
 namespace Delaunay
 {
-	std::vector< Site* > Site::_pool;
+	std::list< Site* > Site::_pool;
+	int Site::_count = 0;
 
 	int BoundsCheck::check( const Point* point, const Rectangle& bounds )
 	{
@@ -45,20 +46,32 @@ namespace Delaunay
 
 	Site::Site( Point* p, int index, Number weight, unsigned color )
 	{
+		_count++;
 		init( p, index, weight, color );
 	}
 
 	Site::~Site( )
 	{
-		// TODO Auto-generated destructor stub
+		_count--;
+	}
+
+	void Site::clean( )
+	{
+		_pool.sort();
+		_pool.unique();
+		for( std::list< Site* >::iterator it = _pool.begin( ), end = _pool.end( );
+				it != end; ++it ){
+			delete (*it);
+		}
+		_pool.clear();
 	}
 
 	Site* Site::create( Point* p, int index, Number weight, unsigned color )
 	{
 		Site* site;
 		if( _pool.size( ) > 0 ){
-			site = _pool.back( );
-			_pool.pop_back( );
+			site = _pool.front( );
+			_pool.pop_front( );
 			site->init( p, index, weight, color );
 		}else{
 			site = new Site( p, index, weight, color );
@@ -79,10 +92,7 @@ namespace Delaunay
 		_siteIndex = index;
 		weight = w;
 		_color = c;
-		_edges.clear( );
-		_region.clear( );
-		_edgeOrientations.clear();
-		_edgeReordered = false;
+		clear( );
 		return this;
 	}
 
@@ -185,6 +195,7 @@ namespace Delaunay
 		_edges.clear( );
 		_edgeOrientations.clear( );
 		_region.clear( );
+		_edgeReordered = false;
 	}
 
 	Site* Site::neighborSite( Edge* edge )
@@ -258,10 +269,10 @@ namespace Delaunay
 					px = bounds.right( );
 					if( newCheck & BoundsCheck::BOTTOM ){
 						py = bounds.bottom( );
-						points.push_back( new Point( px, py ) );
+						points.push_back( Point::create( px, py ) );
 					}else if( newCheck & BoundsCheck::TOP ){
 						py = bounds.top( );
-						points.push_back( new Point( px, py ) );
+						points.push_back( Point::create( px, py ) );
 					}else if( newCheck & BoundsCheck::LEFT ){
 						if( rightPoint->y - bounds.y( ) + newPoint->y - bounds.y( )
 								< bounds.height( ) ){
@@ -269,17 +280,17 @@ namespace Delaunay
 						}else{
 							py = bounds.bottom( );
 						}
-						points.push_back( new Point( px, py ) );
-						points.push_back( new Point( bounds.left( ), py ) );
+						points.push_back( Point::create( px, py ) );
+						points.push_back( Point::create( bounds.left( ), py ) );
 					}
 				}else if( rightCheck & BoundsCheck::LEFT ){
 					px = bounds.left();
 					if( newCheck & BoundsCheck::BOTTOM ){
 						py = bounds.bottom();
-						points.push_back( new Point( px, py ) );
+						points.push_back( Point::create( px, py ) );
 					}else if( newCheck & BoundsCheck::TOP ){
 						py = bounds.top();
-						points.push_back( new Point( px, py ) );
+						points.push_back( Point::create( px, py ) );
 					}else if( newCheck & BoundsCheck::RIGHT ){
 						if( rightPoint->y - bounds.y() + newPoint->y - bounds.y()
 								< bounds.height() ){
@@ -287,17 +298,17 @@ namespace Delaunay
 						}else{
 							py = bounds.bottom();
 						}
-						points.push_back( new Point( px, py ) );
-						points.push_back( new Point( bounds.right(), py ) );
+						points.push_back( Point::create( px, py ) );
+						points.push_back( Point::create( bounds.right(), py ) );
 					}
 				}else if( rightCheck & BoundsCheck::TOP ){
 					py = bounds.top();
 					if( newCheck & BoundsCheck::RIGHT ){
 						px = bounds.right();
-						points.push_back( new Point( px, py ) );
+						points.push_back( Point::create( px, py ) );
 					}else if( newCheck & BoundsCheck::LEFT ){
 						px = bounds.left();
-						points.push_back( new Point( px, py ) );
+						points.push_back( Point::create( px, py ) );
 					}else if( newCheck & BoundsCheck::BOTTOM ){
 						if( rightPoint->x - bounds.x() + newPoint->x - bounds.x()
 								< bounds.width() ){
@@ -305,17 +316,17 @@ namespace Delaunay
 						}else{
 							px = bounds.right();
 						}
-						points.push_back( new Point( px, py ) );
-						points.push_back( new Point( px, bounds.bottom() ) );
+						points.push_back( Point::create( px, py ) );
+						points.push_back( Point::create( px, bounds.bottom() ) );
 					}
 				}else if( rightCheck & BoundsCheck::BOTTOM ){
 					py = bounds.bottom();
 					if( newCheck & BoundsCheck::RIGHT ){
 						px = bounds.right();
-						points.push_back( new Point( px, py ) );
+						points.push_back( Point::create( px, py ) );
 					}else if( newCheck & BoundsCheck::LEFT ){
 						px = bounds.left();
-						points.push_back( new Point( px, py ) );
+						points.push_back( Point::create( px, py ) );
 					}else if( newCheck & BoundsCheck::TOP ){
 						if( rightPoint->x - bounds.x() + newPoint->x - bounds.x()
 								< bounds.width() ){
@@ -323,8 +334,8 @@ namespace Delaunay
 						}else{
 							px = bounds.right();
 						}
-						points.push_back( new Point( px, py ) );
-						points.push_back( new Point( px, bounds.top() ) );
+						points.push_back( Point::create( px, py ) );
+						points.push_back( Point::create( px, bounds.top() ) );
 					}
 				}
 			}

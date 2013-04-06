@@ -9,7 +9,7 @@
 #define DELAUNAY_VERTEX_H_
 
 #include "delaunay/ICoord.h"
-#include <vector>
+#include <list>
 
 namespace Delaunay
 {
@@ -19,6 +19,8 @@ namespace Delaunay
 	class Vertex : public ICoord
 	{
 	public:
+		static void clean();
+
 		static Vertex* create( Number x, Number y);
 		void dispose();
 
@@ -48,7 +50,7 @@ namespace Delaunay
 		~Vertex( );
 		Vertex* init( Number x, Number y );
 
-		static std::vector< Vertex* > _pool;
+		static std::list< Vertex* > _pool;
 		static int _nvertices;
 		int _vertexIndex;
 	};

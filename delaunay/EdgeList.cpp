@@ -31,15 +31,22 @@ namespace Delaunay
 
 	EdgeList::~EdgeList( )
 	{
+		if( _leftEnd && _rightEnd )
+			dispose();
+	}
+
+	void EdgeList::dispose( )
+	{
 		Halfedge* halfEdge = _leftEnd;
 		Halfedge* prevHe = NULL;
-		//while( halfEdge != _rightEnd ){
-		//	prevHe = halfEdge;
-		//	halfEdge = halfEdge->edgeListRightNeighbor;
-		//	prevHe->dispose( );
-		//}
+		while( halfEdge != _rightEnd ){
+			prevHe = halfEdge;
+			halfEdge = halfEdge->edgeListRightNeighbor;
+			prevHe->dispose( );
+		}
+		_leftEnd->reallyDispose();
 		_leftEnd = NULL;
-		_rightEnd->dispose( );
+		_rightEnd->reallyDispose( );
 		_rightEnd = NULL;
 		_hash.clear( );
 	}

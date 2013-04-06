@@ -17,7 +17,7 @@ namespace Delaunay
 {
 	int Edge::_nedges = 0;
 	Edge* Edge::DELETED = new Edge();
-	std::vector< Edge* > Edge::_pool;
+	std::list< Edge* > Edge::_pool;
 
 	Edge::Edge( )
 	{
@@ -27,20 +27,42 @@ namespace Delaunay
 
 	Edge::~Edge( )
 	{
-		dispose( );
+		_leftVertex = NULL;
+		_rightVertex = NULL;
+		if( _clippedVertices[LR::LEFT] ){
+			_clippedVertices[LR::LEFT]->dispose();
+			_clippedVertices[LR::LEFT] = NULL;
+		}
+		if( _clippedVertices[LR::RIGHT] ){
+			_clippedVertices[LR::RIGHT]->dispose();
+			_clippedVertices[LR::RIGHT] = NULL;
+		}
+		_sites[LR::LEFT] = NULL;
+		_sites[LR::RIGHT] = NULL;
+	}
+
+	void Edge::clean( )
+	{
+		_pool.sort();
+		_pool.unique();
+		for( std::list< Edge* >::iterator it = _pool.begin( ), end = _pool.end( );
+				it != end; ++it ){
+			delete (*it);
+		}
+		_pool.clear();
 	}
 
 	LineSegment* Edge::delaunayLine( )
 	{
 		// draw a line connecting the input Sites for which the edge is a bisector:
-		return new LineSegment( leftSite( )->coord( ), rightSite( )->coord( ) );
+		return LineSegment::create( leftSite( )->coord( ), rightSite( )->coord( ) );
 	}
 
 	LineSegment* Edge::voronoiEdge( )
 	{
 		if( !visible() )
-			return new LineSegment( NULL, NULL );
-		return new LineSegment( _clippedVertices[LR::LEFT], _clippedVertices[LR::RIGHT] );
+			return LineSegment::create( NULL, NULL );
+		return LineSegment::create( _clippedVertices[LR::LEFT], _clippedVertices[LR::RIGHT] );
 	}
 
 	Edge* Edge::createBisectingEdge( Site* site0, Site* site1 )
@@ -79,10 +101,12 @@ namespace Delaunay
 		_leftVertex = NULL;
 		_rightVertex = NULL;
 		if( _clippedVertices[LR::LEFT] ){
-			delete _clippedVertices[LR::LEFT], _clippedVertices[LR::LEFT] = NULL;
+			_clippedVertices[LR::LEFT]->dispose();
+			_clippedVertices[LR::LEFT] = NULL;
 		}
 		if( _clippedVertices[LR::RIGHT] ){
-			delete _clippedVertices[LR::RIGHT], _clippedVertices[LR::RIGHT] = NULL;
+			_clippedVertices[LR::RIGHT]->dispose();
+			_clippedVertices[LR::RIGHT] = NULL;
 		}
 		_sites[LR::LEFT] = NULL;
 		_sites[LR::RIGHT] = NULL;
@@ -209,11 +233,11 @@ namespace Delaunay
 		}
 
 		if( vertex0 == _leftVertex ){
-			_clippedVertices[LR::LEFT] = new Point( x0, y0 );
-			_clippedVertices[LR::RIGHT] = new Point( x1, y1 );
+			_clippedVertices[LR::LEFT] = Point::create( x0, y0 );
+			_clippedVertices[LR::RIGHT] = Point::create( x1, y1 );
 		}else{
-			_clippedVertices[LR::RIGHT] = new Point( x0, y0 );
-			_clippedVertices[LR::LEFT] = new Point( x1, y1 );
+			_clippedVertices[LR::RIGHT] = Point::create( x0, y0 );
+			_clippedVertices[LR::LEFT] = Point::create( x1, y1 );
 		}
 
 #ifdef DELAUNAY_DEBUG
@@ -244,8 +268,8 @@ namespace Delaunay
 	{
 		Edge* edge;
 		if( _pool.size( ) > 0 ){
-			edge = _pool.back( );
-			_pool.pop_back( );
+			edge = _pool.front( );
+			_pool.pop_front( );
 			edge->init( );
 		}else{
 			edge = new Edge( );
