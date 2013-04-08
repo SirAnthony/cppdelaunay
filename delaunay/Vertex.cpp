@@ -18,7 +18,7 @@
 namespace Delaunay
 {
 	int Vertex::_nvertices = 0;
-	Vertex* Vertex::VERTEX_AT_INFINITY = new Vertex( NAN, NAN );
+	Vertex* Vertex::VERTEX_AT_INFINITY = NULL;
 	std::list< Vertex* > Vertex::_pool;
 
 	Vertex::Vertex( Number x, Number y )
@@ -35,6 +35,9 @@ namespace Delaunay
 
 	void Vertex::clean( )
 	{
+		VERTEX_AT_INFINITY->dispose();
+		VERTEX_AT_INFINITY = NULL;
+
 		_pool.sort();
 		_pool.unique( );
 		for( std::list< Vertex* >::iterator it = _pool.begin( ), end = _pool.end( );
@@ -54,6 +57,9 @@ namespace Delaunay
 
 	Vertex* Vertex::create( Number x, Number y )
 	{
+		if( VERTEX_AT_INFINITY == NULL )
+			VERTEX_AT_INFINITY = new Vertex( NAN, NAN );
+
 		if( isnan( x ) || isnan( y ) )
 			return VERTEX_AT_INFINITY;
 		Vertex* v = NULL;
