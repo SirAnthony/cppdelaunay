@@ -35,8 +35,10 @@ namespace Delaunay
 
 	void Vertex::clean( )
 	{
-		VERTEX_AT_INFINITY->dispose();
-		VERTEX_AT_INFINITY = NULL;
+		if( VERTEX_AT_INFINITY ){
+			VERTEX_AT_INFINITY->dispose();
+			VERTEX_AT_INFINITY = NULL;
+		}
 
 		_pool.sort();
 		_pool.unique( );
